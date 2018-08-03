@@ -1,19 +1,43 @@
 #include "x/string/stringbuilder.h"
-#include <cstdio>
+#include <cstring>
 
 namespace x {
 
-stringbuilder::stringbuilder()
-{
+namespace {
+const int default_buffer_size = 4096;
 }
 
-stringbuilder::stringbuilder(int fmtlen)
+stringbuilder::stringbuilder()
 {
+    buf_max_size_ = default_buffer_size;
+    buf_ = new char[buf_max_size_];
+}
+
+stringbuilder::stringbuilder(int buflen)
+{
+    buf_max_size_ = buflen;
+    buf_ = new char[buf_max_size_];
+}
+
+stringbuilder::~stringbuilder()
+{
+    if (buf_)
+    {
+        delete buf_;
+    }
+}
+
+stringbuilder::stringbuilder(stringbuilder&&)
+{}
+stringbuilder::stringbuilder(const stringbuilder&)
+{}
+stringbuilder& stringbuilder::operator=(const stringbuilder&)
+{
+    return *this;
 }
 
 void stringbuilder::test()
 {
-    printf("abc\n");
 }
 
 }
