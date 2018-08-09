@@ -1,7 +1,7 @@
 #ifndef LIBX_STRING_IMPL_STRINGBUF_H
 #define LIBX_STRING_IMPL_STRINGBUF_H
 
-namespace x{namespace impl{
+namespace x{
 
 class stringbuf
 {
@@ -9,14 +9,18 @@ public:
     stringbuf();
     ~stringbuf();
 
-    void init(int len);
+    stringbuf& init(int len);
+
+private:
+    void increase();
+    int new_buf_len();
 
 private:
     char* buf_;
-    int buf_len_;
+    int len_;
     char* tail_;
 };
 
-}}
+}
 
 #endif
