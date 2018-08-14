@@ -13,9 +13,10 @@ const int expand3 = 1 * 1024 * 1024;
 }
 
 template <class T>
-int append_to_buffer(char* buf, int buf_len, const char* fmt, const T& val, stringbuf* strbuf)
+int append_to_buffer(const char* fmt, const T& val, stringbuf* strbuf)
 {
-    int len = snprintf(buf, buf_len, fmt, val);
+    int buf_len = strbuf->len_ - (strbuf->tail_ - strbuf->buf_);
+    int len = snprintf(strbuf->tail_, buf_len, fmt, val);
     if (len < 0)
     {
         //todo: encoding error
@@ -32,8 +33,17 @@ int append_to_buffer(char* buf, int buf_len, const char* fmt, const T& val, stri
     {
         if (strbuf->increase())
         {
-            len = snprintf(strbuf->buf_, strbuf->len_ - (strbuf->tail_ - strbuf->buf_), fmt, val);
+            buf_len = strbuf->len_ - (strbuf->tail_ - strbuf->buf_);
+            len = snprintf(strbuf->tail_, buf_len, fmt, val);
         }
+    }
+    if (len > 0 && len < buf_len)
+    {
+        strbuf->tail_ += len;
+    }
+    else
+    {
+        *(strbuf->tail_) = 0;
     }
     return len;
 }
@@ -86,6 +96,7 @@ bool stringbuf::increase()
         char* newbuf = new char[newlen];
 
         memcpy(newbuf, buf_, curlen);
+        newbuf[curlen] = 0;
         len_ = newlen;
         buf_ = newbuf;
         tail_ = buf_ + curlen;
@@ -114,61 +125,67 @@ int stringbuf::new_buf_len()
 
 stringbuf& stringbuf::append(short int val)
 {
-    append_to_buffer(tail_, len_ - (tail_ - buf_), "%hd", val, this);
+    append_to_buffer("%hd", val, this);
     return *this;
 }
 
 stringbuf& stringbuf::append(unsigned short int val)
 {
-    append_to_buffer(tail_, len_ - (tail_ - buf_), "%hu", val, this);
+    append_to_buffer("%hu", val, this);
     return *this;
 }
 
 stringbuf& stringbuf::append(int val)
 {
-    append_to_buffer(tail_, len_ - (tail_ - buf_), "%d", val, this);
+    append_to_buffer("%d", val, this);
     return *this;
 }
 
 stringbuf& stringbuf::append(unsigned int val)
 {
-    append_to_buffer(tail_, len_ - (tail_ - buf_), "%u", val, this);
+    append_to_buffer("%u", val, this);
     return *this;
 }
 
 stringbuf& stringbuf::append(long int val)
 {
-    append_to_buffer(tail_, len_ - (tail_ - buf_), "%ld", val, this);
+    append_to_buffer("%ld", val, this);
     return *this;
 }
 
 stringbuf& stringbuf::append(unsigned long int val)
 {
-    append_to_buffer(tail_, len_ - (tail_ - buf_), "%lu", val, this);
+    append_to_buffer("%lu", val, this);
     return *this;
 }
 
 stringbuf& stringbuf::append(long long int val)
 {
-    append_to_buffer(tail_, len_ - (tail_ - buf_), "%lld", val, this);
+    append_to_buffer("%lld", val, this);
     return *this;
 }
 
 stringbuf& stringbuf::append(unsigned long long int val)
 {
-    append_to_buffer(tail_, len_ - (tail_ - buf_), "%llu", val, this);
+    append_to_buffer("%llu", val, this);
     return *this;
 }
 
 stringbuf& stringbuf::append(char val)
 {
-    append_to_buffer(tail_, len_ - (tail_ - buf_), "%d", (int)val, this);
+    append_to_buffer("%d", (int)val, this);
     return *this;
 }
 
 stringbuf& stringbuf::append(const char* val)
 {
-    append_to_buffer(tail_, len_ - (tail_ - buf_), "%s", val, this);
+    append_to_buffer("%s", val, this);
+    return *this;
+}
+
+stringbuf& stringbuf::append(double val)
+{
+    append_to_buffer("%f", val, this);
     return *this;
 }
 

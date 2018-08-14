@@ -25,12 +25,13 @@ public:
     stringbuf& append(unsigned long long int val);
     stringbuf& append(char val);
     stringbuf& append(const char* val);
+    stringbuf& append(double val);
 
 private:
     bool increase();
     int new_buf_len();
     template <class T>
-    friend int append_to_buffer(char* buf, int buf_len, const char* fmt, const T& val, stringbuf* strbuf);
+    friend int append_to_buffer(const char* fmt, const T& val, stringbuf* strbuf);
 
 private:
     char* buf_;

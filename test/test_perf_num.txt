@@ -1,0 +1,6 @@
+stringbuf newbuf:           177.504951
+stringbuf existbuf:         135.116473
+stringbuf newbuf double:    433.471071
+stringbuf existbuf double:  310.223309
+snprintf:                   26.499034
+snprintf double:            211.310816
