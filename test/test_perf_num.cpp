@@ -9,6 +9,7 @@
 const long long max_count = 100000000;
 void test_stringbuf_newbuf();
 void test_stringbuf_existbuf();
+void test_stringbuf_newbuf_string();
 void test_stringbuf_existbuf_string();
 void test_stringbuf_newbuf_integer();
 void test_stringbuf_existbuf_integer();
@@ -30,7 +31,7 @@ void print(const char* str, const timeval& tv);
 
 int main()
 {
-    test_stringbuf_newbuf();
+    /*test_stringbuf_newbuf();
     test_stringbuf_existbuf();
     test_stringbuf_existbuf_string();
     test_stringbuf_newbuf_integer();
@@ -46,7 +47,12 @@ int main()
     test_snprintf();
     test_snprintf_string();
     test_snprintf_integer();
-    test_snprintf_double();
+    test_snprintf_double();*/
+
+    test_stringbuf_newbuf_string();
+    test_stringbuf_existbuf_string();
+    test_stringstream_newbuf_string();
+    test_snprintf_string();
 }
 
 void test_stringbuf_newbuf()
@@ -115,6 +121,28 @@ void test_stringbuf_existbuf_string()
     gettimeofday(&tv2, NULL);
     timeval tv = timesub(tv1, tv2);
     print("stringbuf existbuf string", tv);
+}
+
+void test_stringbuf_newbuf_string()
+{
+    timeval tv1, tv2;
+    gettimeofday(&tv1, NULL);
+    for (long long i = 0; i < max_count; ++i)
+    {
+        x::stringbuf().init(20)
+            .append("abc")
+            .append("aaaaaaaaaaaaaaaaaaaaaaaaaa")
+            .append("aabbccddeeff")
+            .append("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+            .append("ccccc")
+            .append("dd")
+            .append("e")
+            .append("hgiuleif")
+            .buffer();
+    }
+    gettimeofday(&tv2, NULL);
+    timeval tv = timesub(tv1, tv2);
+    print("stringbuf newbuf string", tv);
 }
 
 void test_stringbuf_newbuf_integer()
