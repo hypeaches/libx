@@ -1,6 +1,15 @@
-stringbuf newbuf:           177.504951
-stringbuf existbuf:         135.116473
-stringbuf newbuf double:    433.471071
-stringbuf existbuf double:  310.223309
-snprintf:                   26.499034
-snprintf double:            211.310816
+stringbuf newbuf:           178.190115
+stringbuf existbuf:         133.824869
+stringbuf existbuf string:  38.951191
+stringbuf newbuf integer:   67.919883
+stringbuf existbuf integer: 51.638540
+stringbuf newbuf double:    364.439026
+stringbuf existbuf double:  226.682485
+stringstream:               68.262720
+stringstream string:        36.88479
+stringstream integer:       45.329014
+stringstream double:        292.783661
+snprintf:                   26.487946
+snprintf string:            15.325711
+snprintf integer:           28.583748
+snprintf double:            203.124649

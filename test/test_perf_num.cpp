@@ -1,24 +1,51 @@
 #include <sys/time.h>
 #include <iostream>
+#include <iomanip>
+#include <sstream>
 #include <cstdio>
 #include <x/string/stringbuf.h>
 
+//const long long max_count = 100000000;
 const long long max_count = 100000000;
 void test_stringbuf_newbuf();
 void test_stringbuf_existbuf();
+void test_stringbuf_existbuf_string();
+void test_stringbuf_newbuf_integer();
+void test_stringbuf_existbuf_integer();
 void test_stringbuf_newbuf_double();
 void test_stringbuf_existbuf_double();
+
+void test_stringstream_newbuf();
+void test_stringstream_newbuf_string();
+void test_stringstream_newbuf_integer();
+void test_stringstream_newbuf_double();
+
 void test_snprintf();
+void test_snprintf_string();
+void test_snprintf_integer();
 void test_snprintf_double();
+
 timeval timesub(const timeval& tv1, const timeval& tv2);
+void print(const char* str, const timeval& tv);
 
 int main()
 {
     test_stringbuf_newbuf();
     test_stringbuf_existbuf();
+    test_stringbuf_existbuf_string();
+    test_stringbuf_newbuf_integer();
+    test_stringbuf_existbuf_integer();
     test_stringbuf_newbuf_double();
     test_stringbuf_existbuf_double();
+
+    test_stringstream_newbuf();
+    test_stringstream_newbuf_string();
+    test_stringstream_newbuf_integer();
+    test_stringstream_newbuf_double();
+
     test_snprintf();
+    test_snprintf_string();
+    test_snprintf_integer();
     test_snprintf_double();
 }
 
@@ -41,7 +68,7 @@ void test_stringbuf_newbuf()
     }
     gettimeofday(&tv2, NULL);
     timeval tv = timesub(tv1, tv2);
-    std::cout<<"stringbuf newbuf:"<<tv.tv_sec<<"."<<tv.tv_usec<<std::endl;
+    print("stringbuf newbuf", tv);
 }
 
 void test_stringbuf_existbuf()
@@ -64,7 +91,75 @@ void test_stringbuf_existbuf()
     }
     gettimeofday(&tv2, NULL);
     timeval tv = timesub(tv1, tv2);
-    std::cout<<"stringbuf existbuf:"<<tv.tv_sec<<"."<<tv.tv_usec<<std::endl;
+    print("stringbuf existbuf", tv);
+}
+
+void test_stringbuf_existbuf_string()
+{
+    char buf[1024];
+    timeval tv1, tv2;
+    gettimeofday(&tv1, NULL);
+    for (long long i = 0; i < max_count; ++i)
+    {
+        x::stringbuf().init(buf, sizeof(buf))
+            .append("abc")
+            .append("aaaaaaaaaaaaaaaaaaaaaaaaaa")
+            .append("aabbccddeeff")
+            .append("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+            .append("ccccc")
+            .append("dd")
+            .append("e")
+            .append("hgiuleif")
+            .buffer();
+    }
+    gettimeofday(&tv2, NULL);
+    timeval tv = timesub(tv1, tv2);
+    print("stringbuf existbuf string", tv);
+}
+
+void test_stringbuf_newbuf_integer()
+{
+    timeval tv1, tv2;
+    gettimeofday(&tv1, NULL);
+    for (long long i = 0; i < max_count; ++i)
+    {
+        x::stringbuf().init(7)
+            .append((short)12)
+            .append((unsigned short)23)
+            .append((int)34)
+            .append((unsigned int)45)
+            .append((long)56)
+            .append((unsigned long)67)
+            .append((long long)78)
+            .append((unsigned long long)89)
+            .buffer();
+    }
+    gettimeofday(&tv2, NULL);
+    timeval tv = timesub(tv1, tv2);
+    print("stringbuf newbuf integer", tv);
+}
+
+void test_stringbuf_existbuf_integer()
+{
+    char buf[1024];
+    timeval tv1, tv2;
+    gettimeofday(&tv1, NULL);
+    for (long long i = 0; i < max_count; ++i)
+    {
+        x::stringbuf().init(buf, sizeof(buf))
+            .append((short)12)
+            .append((unsigned short)23)
+            .append((int)34)
+            .append((unsigned int)45)
+            .append((long)56)
+            .append((unsigned long)67)
+            .append((long long)78)
+            .append((unsigned long long)89)
+            .buffer();
+    }
+    gettimeofday(&tv2, NULL);
+    timeval tv = timesub(tv1, tv2);
+    print("stringbuf existbuf integer", tv);
 }
 
 void test_stringbuf_newbuf_double()
@@ -74,19 +169,19 @@ void test_stringbuf_newbuf_double()
     for (long long i = 0; i < max_count; ++i)
     {
         x::stringbuf().init(7)
-            .append("double1:").append(12.12).append(". ")
-            .append("double2:").append(23.23).append(". ")
-            .append("double3:").append(34.34).append(". ")
-            .append("double4:").append(45.45).append(". ")
-            .append("double5:").append(56.56).append(". ")
-            .append("double6:").append(67.67).append(". ")
-            .append("double7:").append(78.78).append(". ")
-            .append("double8:").append(89.89).append(".")
+            .append(12.12)
+            .append(23.23)
+            .append(34.34)
+            .append(45.45)
+            .append(56.56)
+            .append(67.67)
+            .append(78.78)
+            .append(89.89)
             .buffer();
     }
     gettimeofday(&tv2, NULL);
     timeval tv = timesub(tv1, tv2);
-    std::cout<<"stringbuf newbuf double:"<<tv.tv_sec<<"."<<tv.tv_usec<<std::endl;
+    print("stringbuf newbuf double", tv);
 }
 
 void test_stringbuf_existbuf_double()
@@ -97,19 +192,107 @@ void test_stringbuf_existbuf_double()
     for (long long i = 0; i < max_count; ++i)
     {
         x::stringbuf().init(buf, sizeof(buf))
-            .append("double1:").append(12.12).append(". ")
-            .append("double2:").append(23.23).append(". ")
-            .append("double3:").append(34.34).append(". ")
-            .append("double4:").append(45.45).append(". ")
-            .append("double5:").append(56.56).append(". ")
-            .append("double6:").append(67.67).append(". ")
-            .append("double7:").append(78.78).append(". ")
-            .append("double8:").append(89.89).append(".")
+            .append(12.12)
+            .append(23.23)
+            .append(34.34)
+            .append(45.45)
+            .append(56.56)
+            .append(67.67)
+            .append(78.78)
+            .append(89.89)
             .buffer();
     }
     gettimeofday(&tv2, NULL);
     timeval tv = timesub(tv1, tv2);
-    std::cout<<"stringbuf existbuf double:"<<tv.tv_sec<<"."<<tv.tv_usec<<std::endl;
+    print("stringbuf existbuf double", tv);
+}
+
+void test_stringstream_newbuf()
+{
+    timeval tv1, tv2;
+    gettimeofday(&tv1, NULL);
+    for (long long i = 0; i < max_count; ++i)
+    {
+        std::ostringstream oss;
+        oss
+            <<("short:")<<((short)12)<<(". ")
+            <<("unsigned short:")<<((unsigned short)23)<<(". ")
+            <<("int:")<<((int)34)<<(". ")
+            <<("unsigned int:")<<((unsigned int)45)<<(". ")
+            <<("long:")<<((long)56)<<(". ")
+            <<("unsigned long:")<<((unsigned long)67)<<(". ")
+            <<("long long:")<<((long long)78)<<(". ")
+            <<("unsigned long long:")<<((unsigned long long)89)<<(".");
+    }
+    gettimeofday(&tv2, NULL);
+    timeval tv = timesub(tv1, tv2);
+    print("stringstream", tv);
+}
+
+void test_stringstream_newbuf_string()
+{
+    timeval tv1, tv2;
+    gettimeofday(&tv1, NULL);
+    for (long long i = 0; i < max_count; ++i)
+    {
+        std::ostringstream oss;
+        oss
+            <<("abc")
+            <<("aaaaaaaaaaaaaaaaaaaaaaaaaa")
+            <<("aabbccddeeff")
+            <<("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb")
+            <<("ccccc")
+            <<("dd")
+            <<("e")
+            <<("hgiuleif");
+    }
+    gettimeofday(&tv2, NULL);
+    timeval tv = timesub(tv1, tv2);
+    print("stringstream string", tv);
+}
+
+void test_stringstream_newbuf_integer()
+{
+    timeval tv1, tv2;
+    gettimeofday(&tv1, NULL);
+    for (long long i = 0; i < max_count; ++i)
+    {
+        std::ostringstream oss;
+        oss
+            <<((short)12)
+            <<((unsigned short)23)
+            <<((int)34)
+            <<((unsigned int)45)
+            <<((long)56)
+            <<((unsigned long)67)
+            <<((long long)78)
+            <<((unsigned long long)89);
+    }
+    gettimeofday(&tv2, NULL);
+    timeval tv = timesub(tv1, tv2);
+    print("stringstream integer", tv);
+}
+
+void test_stringstream_newbuf_double()
+{
+    timeval tv1, tv2;
+    gettimeofday(&tv1, NULL);
+    for (long long i = 0; i < max_count; ++i)
+    {
+        std::ostringstream oss;
+        oss
+            <<(12.12)
+            <<(23.23)
+            <<(34.34)
+            <<(45.45)
+            <<(56.56)
+            <<(67.67)
+            <<(78.78)
+            <<(89.89);
+    }
+    gettimeofday(&tv2, NULL);
+    timeval tv = timesub(tv1, tv2);
+    print("stringstream double", tv);
 }
 
 void test_snprintf()
@@ -124,7 +307,44 @@ void test_snprintf()
     }
     gettimeofday(&tv2, NULL);
     timeval tv = timesub(tv1, tv2);
-    std::cout<<"snprintf:"<<tv.tv_sec<<"."<<tv.tv_usec<<std::endl;
+    print("snprintf", tv);
+}
+
+void test_snprintf_string()
+{
+    char buf[1024];
+    timeval tv1, tv2;
+    gettimeofday(&tv1, NULL);
+    for (long long i = 0; i < max_count; ++i)
+    {
+        snprintf(buf, sizeof(buf), "%s%s%s%s%s%s%s%s",
+            ("abc"),
+            ("aaaaaaaaaaaaaaaaaaaaaaaaaa"),
+            ("aabbccddeeff"),
+            ("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"),
+            ("ccccc"),
+            ("dd"),
+            ("e"),
+            ("hgiuleif"));
+    }
+    gettimeofday(&tv2, NULL);
+    timeval tv = timesub(tv1, tv2);
+    print("snprintf string", tv);
+}
+
+void test_snprintf_integer()
+{
+    char buf[1024];
+    timeval tv1, tv2;
+    gettimeofday(&tv1, NULL);
+    for (long long i = 0; i < max_count; ++i)
+    {
+        snprintf(buf, sizeof(buf), "%hd%hu%d%u%ld%lu%lld%llu.",
+                    (short)12, (unsigned short)23, (int)34, (unsigned int)45, (long)56, (unsigned long)67, (long long)78, (unsigned long long)89);
+    }
+    gettimeofday(&tv2, NULL);
+    timeval tv = timesub(tv1, tv2);
+    print("snprintf integer", tv);
 }
 
 void test_snprintf_double()
@@ -134,12 +354,12 @@ void test_snprintf_double()
     gettimeofday(&tv1, NULL);
     for (long long i = 0; i < max_count; ++i)
     {
-        snprintf(buf, sizeof(buf), "double1:%f. double2:%f. double3:%f. double4:%f. double5:%f. double6:%f. double7:%f. double8:%f.",
+        snprintf(buf, sizeof(buf), "%f%f%f%f%f%f%f%f",
                     12.12, 23.23, 34.34, 45.45, 56.56, 67.67, 78.78, 89.89);
     }
     gettimeofday(&tv2, NULL);
     timeval tv = timesub(tv1, tv2);
-    std::cout<<"snprintf double:"<<tv.tv_sec<<"."<<tv.tv_usec<<std::endl;
+    print("snprintf double", tv);
 }
 
 timeval timesub(const timeval& tv1, const timeval& tv2)
@@ -153,5 +373,10 @@ timeval timesub(const timeval& tv1, const timeval& tv2)
         tv.tv_usec += 1000000;
     }
     return tv;
+}
+
+void print(const char* str, const timeval& tv)
+{
+    std::cout<<std::setw(27)<<str<<":"<<tv.tv_sec<<"."<<tv.tv_usec<<std::endl;
 }
 
