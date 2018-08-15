@@ -179,7 +179,24 @@ stringbuf& stringbuf::append(char val)
 
 stringbuf& stringbuf::append(const char* val)
 {
-    append_to_buffer("%s", val, this);
+    if (!val)
+    {
+        return *this;
+    }
+
+    int len = strlen(val);
+    int curlen = len_ - (tail_ - buf_);
+    bool ok = true;
+    if (curlen <= len)
+    {
+        ok = increase();
+    }
+    if (ok)
+    {
+        memcpy(tail_, val, len);
+        tail_ += len;
+        *tail_ = 0;
+    }
     return *this;
 }
 
