@@ -31,7 +31,11 @@ private:
     bool increase();
     int new_buf_len();
     template <class T>
+    friend int append_integer_to_buffer(char* buf, int buf_len, T val);
+    template <class T>
     friend int append_to_buffer(const char* fmt, const T& val, stringbuf* strbuf);
+    template <class T>
+    friend int append_integer_to_buffer(const T& val, stringbuf* strbuf);
 
 private:
     char* buf_;

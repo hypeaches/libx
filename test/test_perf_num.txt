@@ -13,3 +13,21 @@ snprintf:                   26.487946
 snprintf string:            15.325711
 snprintf integer:           28.583748
 snprintf double:            203.124649
+
+2018.08.16
+stringbuf newbuf:           24.979512
+stringbuf existbuf:         24.243230
+stringbuf newbuf string:    12.159080
+stringbuf existbuf string:  6.118937
+stringbuf newbuf integer:   14.506580
+stringbuf existbuf integer: 13.486820
+stringbuf newbuf double:    228.864297
+stringbuf existbuf double:  227.462958
+stringstream:               68.265679
+stringstream string:        35.919548
+stringstream integer:       45.437625
+stringstream double:        288.107063
+snprintf:                   26.493350
+snprintf string:            15.806877
+snprintf integer:           28.390795
+snprintf double:            202.622579
