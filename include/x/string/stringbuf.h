@@ -9,10 +9,10 @@ class stringbuf
 {
 public:
     stringbuf();
+    stringbuf(int len);
+    stringbuf(char* buf, int len);
     ~stringbuf();
 
-    stringbuf& init(int len);
-    stringbuf& init(char* buf, int len);
     const char* buffer() const { return buf_; }
 
     stringbuf& append(short int val);
@@ -28,6 +28,8 @@ public:
     stringbuf& append(double val);
 
 private:
+    stringbuf& init(int len);
+    stringbuf& init(char* buf, int len);
     bool increase();
     int new_buf_len();
     template <class T>

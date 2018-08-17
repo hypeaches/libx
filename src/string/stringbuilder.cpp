@@ -8,23 +8,22 @@ const int default_buffer_size = 4096;
 }
 
 stringbuilder::stringbuilder()
+        : buf_(default_buffer_size)
 {
-    buf_max_size_ = default_buffer_size;
-    buf_ = new char[buf_max_size_];
 }
 
-stringbuilder::stringbuilder(int buflen)
+stringbuilder::stringbuilder(int len)
+        : buf_(len)
 {
-    buf_max_size_ = buflen;
-    buf_ = new char[buf_max_size_];
+}
+
+stringbuilder::stringbuilder(char* buf, int len)
+        : buf_(buf, len)
+{
 }
 
 stringbuilder::~stringbuilder()
 {
-    if (buf_)
-    {
-        delete buf_;
-    }
 }
 
 stringbuilder::stringbuilder(stringbuilder&&)
@@ -36,8 +35,10 @@ stringbuilder& stringbuilder::operator=(const stringbuilder&)
     return *this;
 }
 
-void stringbuilder::test()
+stringbuilder& stringbuilder::format(const char* fmt)
 {
+    fmt_.set_fmt(fmt);
+    return *this;
 }
 
 }

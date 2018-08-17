@@ -1,6 +1,7 @@
 #ifndef LIBX_STRING_STRINGBUILDER_H
 #define LIBX_STRING_STRINGBUILDER_H
 
+#include "x/string/stringbuf.h"
 #include "x/string/impl/stringfmt.h"
 
 namespace x {
@@ -8,17 +9,18 @@ namespace x {
 class stringbuilder {
 public:
     stringbuilder();
-    stringbuilder(int buflen);
+    stringbuilder(int len);
+    stringbuilder(char* buf, int len);
     ~stringbuilder();
 
-    void test();
+    stringbuilder& format(const char* fmt);
+
 private:
     stringbuilder(stringbuilder&&);
     stringbuilder(const stringbuilder&);
     stringbuilder& operator=(const stringbuilder&);
 
-    char* buf_;
-    int buf_max_size_;
+    x::stringbuf buf_;
     x::impl::stringfmt fmt_;
 };
 

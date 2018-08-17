@@ -167,10 +167,17 @@ int append_integer_to_buffer(const T& val, stringbuf* strbuf)
 
 stringbuf::stringbuf()
 {
-    buf_ = nullptr;
-    len_ = 0;
-    tail_ = nullptr;
-    auto_managed_buf_ = false;
+    init(4096);
+}
+
+stringbuf::stringbuf(int len)
+{
+    init(len);
+}
+
+stringbuf::stringbuf(char* buf, int len)
+{
+    init(buf, len);
 }
 
 stringbuf::~stringbuf()
@@ -185,21 +192,21 @@ stringbuf::~stringbuf()
     }
 }
 
-stringbuf& stringbuf::init(char* buf, int len)
-{
-    buf_ = buf;
-    len_ = len;
-    tail_ = buf;
-    auto_managed_buf_ = false;
-    return *this;
-}
-
 stringbuf& stringbuf::init(int len)
 {
     len_ = (len > 0) ? len : default_buf_len;
     buf_ = new char[len_];
     tail_ = buf_;
     auto_managed_buf_ = true;
+    return *this;
+}
+
+stringbuf& stringbuf::init(char* buf, int len)
+{
+    buf_ = buf;
+    len_ = len;
+    tail_ = buf;
+    auto_managed_buf_ = false;
     return *this;
 }
 
