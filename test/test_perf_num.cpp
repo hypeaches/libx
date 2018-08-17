@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <x/string/stringbuf.h>
 
+const int stringbuf_init_len = 1024;
 //const long long max_count = 100000000;
 const long long max_count = 100000000;
 void test_stringbuf_newbuf();
@@ -31,8 +32,25 @@ void print(const char* str, const timeval& tv);
 
 int main()
 {
-    /*test_stringbuf_newbuf();
+#if 0
+    printf("%s\n", x::stringbuf().init(32)
+                .append(123).append(".").append(-456).append(0)
+                .buffer());
+#elif 1
+    test_stringbuf_newbuf();
     test_stringbuf_existbuf();
+    test_stringbuf_newbuf_string();
+    test_stringbuf_existbuf_string();
+    test_stringbuf_newbuf_integer();
+    test_stringbuf_existbuf_integer();
+
+    test_snprintf();
+    test_snprintf_string();
+    test_snprintf_integer();
+#elif 0
+    test_stringbuf_newbuf();
+    test_stringbuf_existbuf();
+    test_stringbuf_newbuf_string();
     test_stringbuf_existbuf_string();
     test_stringbuf_newbuf_integer();
     test_stringbuf_existbuf_integer();
@@ -47,12 +65,13 @@ int main()
     test_snprintf();
     test_snprintf_string();
     test_snprintf_integer();
-    test_snprintf_double();*/
-
+    test_snprintf_double();
+#elif 0
     test_stringbuf_newbuf_string();
     test_stringbuf_existbuf_string();
     test_stringstream_newbuf_string();
     test_snprintf_string();
+#endif
 }
 
 void test_stringbuf_newbuf()
@@ -61,7 +80,7 @@ void test_stringbuf_newbuf()
     gettimeofday(&tv1, NULL);
     for (long long i = 0; i < max_count; ++i)
     {
-        x::stringbuf().init(7)
+        x::stringbuf().init(stringbuf_init_len)
             .append("short:").append((short)12).append(". ")
             .append("unsigned short:").append((unsigned short)23).append(". ")
             .append("int:").append((int)34).append(". ")
@@ -151,7 +170,7 @@ void test_stringbuf_newbuf_integer()
     gettimeofday(&tv1, NULL);
     for (long long i = 0; i < max_count; ++i)
     {
-        x::stringbuf().init(7)
+        x::stringbuf().init(stringbuf_init_len)
             .append((short)12)
             .append((unsigned short)23)
             .append((int)34)
@@ -196,7 +215,7 @@ void test_stringbuf_newbuf_double()
     gettimeofday(&tv1, NULL);
     for (long long i = 0; i < max_count; ++i)
     {
-        x::stringbuf().init(7)
+        x::stringbuf().init(stringbuf_init_len)
             .append(12.12)
             .append(23.23)
             .append(34.34)

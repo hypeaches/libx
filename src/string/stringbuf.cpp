@@ -12,7 +12,7 @@ const int expand_len_pos2 = 10 * 1024 * 1024;
 const int expand3 = 1 * 1024 * 1024;
 }
 
-template <class T>
+/*template <class T>
 int append_integer_to_buffer(char* buf, int buf_len, T val)
 {
     if (!buf || buf_len <= 0)
@@ -24,6 +24,7 @@ int append_integer_to_buffer(char* buf, int buf_len, T val)
     if (val < 0)
     {
         *buf = '-';
+        ++buf;
         --buf_len;
         val = -val;
         ++count;
@@ -43,10 +44,55 @@ int append_integer_to_buffer(char* buf, int buf_len, T val)
     if (buf_len > 0)
     {
         *tail = 0;
+        --tail;
+        char c;
+        for (; buf < tail; ++buf, --tail)
+        {
+            c = *buf;
+            *buf = *tail;
+            *tail = c;
+        }
     }
     return count;
-}
+}*/
 
+template <class T>
+int append_integer_to_buffer(char* buf, int buf_len, T val)
+{
+    if (!buf || buf_len <= 0)
+    {
+        return -1;
+    }
+
+    int count = 0;
+    if (val < 0)
+    {
+        *buf = '-';
+        val = -val;
+        ++count;
+    }
+
+    for (T vc = val; vc; vc /= 10)
+    {
+        ++count;
+    }
+    if (count >= buf_len)
+    {
+        return buf_len;
+    }
+
+    char* tail = buf + count;
+    *tail-- = 0;
+    T num = 0;
+    do
+    {
+        num = val % 10;
+        val /= 10;
+        *tail = num + '0';
+        --tail;
+    } while (val);
+    return count;
+}
 template <class T>
 int append_to_buffer(const char* fmt, const T& val, stringbuf* strbuf)
 {
