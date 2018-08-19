@@ -41,7 +41,7 @@ bool stringfmt::next(const char*& fmt, int& len)
     }
     if (cur_ - fmt_ == len_)
     {
-        len = len_;
+        len = cur_ - fmt;
         return false;
     }
     if (cur_ - fmt_ + 1 == len_)

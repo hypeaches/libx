@@ -14,6 +14,7 @@ public:
     ~stringbuf();
 
     const char* buffer() const { return buf_; }
+    char* moved_buffer();
 
     stringbuf& append(short int val);
     stringbuf& append(unsigned short int val);
@@ -25,6 +26,7 @@ public:
     stringbuf& append(unsigned long long int val);
     stringbuf& append(char val);
     stringbuf& append(const char* val);
+    stringbuf& append(const char* val, int len);
     stringbuf& append(double val);
 
 private:

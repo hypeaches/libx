@@ -311,12 +311,15 @@ stringbuf& stringbuf::append(char val)
 
 stringbuf& stringbuf::append(const char* val)
 {
-    if (!val)
+    return append(val, strlen(val));
+}
+
+stringbuf& stringbuf::append(const char* val, int len)
+{
+    if (!val || (len == 0))
     {
         return *this;
     }
-
-    int len = strlen(val);
     int curlen = len_ - (tail_ - buf_);
     bool ok = true;
     if (curlen <= len)
@@ -336,6 +339,16 @@ stringbuf& stringbuf::append(double val)
 {
     append_to_buffer("%f", val, this);
     return *this;
+}
+
+char* stringbuf::moved_buffer()
+{
+    char* buf = buf_;
+    buf_ = nullptr;
+    len_ = 0;
+    tail_ = nullptr;
+    auto_managed_buf_ = false;
+    return buf;
 }
 
 }

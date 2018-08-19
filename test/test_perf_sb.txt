@@ -1,0 +1,16 @@
+stringbuilder newbuf:           51.172218
+stringbuilder existbuf:         49.720175
+stringbuilder newbuf string:    25.809679
+stringbuilder existbuf string:  24.470452
+stringbuilder newbuf integer:   34.73484
+stringbuilder existbuf integer: 32.501609
+stringbuilder newbuf double:    249.79793
+stringbuilder existbuf double:  245.731010
+stringstream:                   67.728664
+stringstream string:            36.179538
+stringstream integer:           56.90565
+stringstream double:            300.650112
+snprintf:                       26.794433
+snprintf string:                17.505715
+snprintf integer:               27.618484
+snprintf double:                204.831324
