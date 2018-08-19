@@ -351,4 +351,29 @@ char* stringbuf::moved_buffer()
     return buf;
 }
 
+stringbuf& stringbuf::pop_back()
+{
+    if (tail_ > buf_)
+    {
+        --tail_;
+        *tail_ = 0;
+    }
+    return *this;
+}
+
+stringbuf& stringbuf::pop_back(char c)
+{
+    if ((tail_ > buf_) && (tail_[-1] == c))
+    {
+        --tail_;
+        *tail_ = 0;
+    }
+    return *this;
+}
+
+int stringbuf::size()
+{
+    return (tail_ - buf_);
+}
+
 }

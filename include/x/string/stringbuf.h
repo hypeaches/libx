@@ -29,6 +29,11 @@ public:
     stringbuf& append(const char* val, int len);
     stringbuf& append(double val);
 
+    stringbuf& pop_back();
+    stringbuf& pop_back(char c);
+
+    int size();
+
 private:
     stringbuf& init(int len);
     stringbuf& init(char* buf, int len);
