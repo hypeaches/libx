@@ -1,0 +1,5 @@
+set(LIBX_PROJECT_NAME x)
+file(GLOB_RECURSE LIBX_SOURCE_LIST "string/*.cpp")
+set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR})
+add_library(${LIBX_PROJECT_NAME} STATIC ${LIBX_SOURCE_LIST})
+include_directories(${PROJECT_SOURCE_DIR}/include)
