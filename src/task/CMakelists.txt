@@ -1,0 +1,17 @@
+project(xtask)
+
+add_compile_options(-g)
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_ROOT_DIR})
+include_directories(${PROJECT_ROOT_DIR}/include)
+
+set(X_TASK_SRC 
+        thread_task/thread_pool_impl.cpp
+        thread_task/thread_pool.cpp
+        timer_task/timer_task_impl.cpp
+        timer_task/timer_task.cpp
+        timer_task/timerfd.cpp
+)
+
+add_library(${PROJECT_NAME} ${X_TASK_SRC})
+target_link_libraries(${PROJECT_NAME} pthread)

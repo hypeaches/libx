@@ -1,0 +1,6 @@
+project(x)
+
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_ROOT_DIR})
+include_directories(${PROJECT_ROOT_DIR}/include)
+aux_source_directory(. X_STRING_SRC)
+add_library(${PROJECT_NAME} ${X_STRING_SRC})
