@@ -12,50 +12,6 @@ const int expand_len_pos2 = 10 * 1024 * 1024;
 const int expand3 = 1 * 1024 * 1024;
 }
 
-/*template <class T>
-int append_integer_to_buffer(char* buf, int buf_len, T val)
-{
-    if (!buf || buf_len <= 0)
-    {
-        return -1;
-    }
-
-    int count = 0;
-    if (val < 0)
-    {
-        *buf = '-';
-        ++buf;
-        --buf_len;
-        val = -val;
-        ++count;
-    }
-
-    char* tail = buf;
-    T num = 0;
-    while (buf_len > 0 && val)
-    {
-        num = val % 10;
-        val /= 10;
-        *tail = num + '0';
-        ++tail;
-        --buf_len;
-        ++count;
-    }
-    if (buf_len > 0)
-    {
-        *tail = 0;
-        --tail;
-        char c;
-        for (; buf < tail; ++buf, --tail)
-        {
-            c = *buf;
-            *buf = *tail;
-            *tail = c;
-        }
-    }
-    return count;
-}*/
-
 template <class T>
 int append_integer_to_buffer(char* buf, int buf_len, T val)
 {

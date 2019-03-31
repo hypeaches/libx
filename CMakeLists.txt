@@ -1,10 +1,22 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.5 FATAL_ERROR)
 
 project(x)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -g")
+add_compile_options(-g)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/include
+                    ${PROJECT_SOURCE_DIR})
 
-file(GLOB_RECURSE LIBX_SRC_LIST ./src/*.cpp)
-include_directories(${PROJECT_SOURCE_DIR}/include)
+set(X_SRC 
+        src/error/error_info.cpp
+        src/error/system_error_info.cpp
+        src/string/stringbuf.cpp
+        src/task/thread_task/thread_pool_impl.cpp
+        src/task/thread_task/thread_pool.cpp
+        src/task/timer_task/timer_impl.cpp
+        src/task/timer_task/timer_task_impl.cpp
+        src/task/timer_task/timer_task.cpp
+)
 
-add_library(${PROJECT_NAME} STATIC ${LIBX_SRC_LIST})
+add_library(${PROJECT_NAME} ${X_SRC})
+target_link_libraries(${PROJECT_NAME} pthread)
