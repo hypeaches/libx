@@ -3,24 +3,16 @@
 
 namespace x {
 
-class XError;
-
 class ErrorInfo
 {
 public:
-    ErrorInfo();
-    ErrorInfo(XError* err);
-    ErrorInfo(ErrorInfo&& other);
-    ErrorInfo(const ErrorInfo& other) = delete;
-    ErrorInfo& operator=(ErrorInfo&& other);
-    ErrorInfo& operator=(const ErrorInfo& other) = delete;
-    ~ErrorInfo();
+    static x::ErrorInfo* GetErrorInfo();
 
-    operator bool() const;
-    const char* ToCString();
-
-private:
-    x::XError* err_;
+    virtual ~ErrorInfo();
+    virtual const char* Ip() = 0;
+    virtual int Port() = 0;
+    virtual int SystemErrorCode() = 0;
+    virtual const char* Message() = 0;
 };
 
 }

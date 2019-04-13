@@ -1,9 +1,10 @@
 #!/bin/bash
 
-if [ -f test_perf_num ]
+project=test_perf_num
+if [ -f $project ]
 then
-    rm -f test_perf_num
+    rm -f $project
 fi
 
-g++ -g -I../include -o test_perf_num test_perf_num.cpp -L. -lx
-./test_perf_num
+g++ -g -I../include -o $project $project.cpp -L../build -lx
+./$project

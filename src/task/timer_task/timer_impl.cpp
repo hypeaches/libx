@@ -1,7 +1,8 @@
 #include "timer_impl.h"
-#include "src/error/system_error_info.h"
 #include <unistd.h>
 #include <sys/epoll.h>
+#include "src/error/error_info_impl.h"
+#include "src/error/error_info_factory.h"
 #include "x/task/thread_pool.h"
 #include "timer_task_impl.h"
 
@@ -38,16 +39,17 @@ x::task::TimerTask* TimerImpl::CreateTask()
     return new x::task::TimerTaskImpl(this);
 }
 
-x::ErrorInfo TimerImpl::Init()
+bool TimerImpl::Init()
 {
     efd_ = epoll_create1(0);
     if (efd_ == -1)
     {
-        return ErrorInfo(new x::SystemErrorInfo(errno, "create epoll fd failed"));
+        ErrorInfoFactory::Create()->SetSystemError(errno, "create epoll fd failed");
+        return false;
     }
     running_ = true;
     epoll_thread_ = std::thread(&TimerImpl::epollThread, this);
-    return x::ErrorInfo();
+    return true;
 }
 
 void TimerImpl::CreateThreadPool(int thread_pool_size, int max_task_num)

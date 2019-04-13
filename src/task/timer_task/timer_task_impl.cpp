@@ -5,7 +5,8 @@
 #include <cerrno>
 #include <cstring>
 #include "timer_impl.h"
-#include "src/error/system_error_info.h"
+#include "src/error/error_info_impl.h"
+#include "src/error/error_info_factory.h"
 
 namespace x{namespace task {
 
@@ -47,14 +48,14 @@ void TimerTaskImpl::Destroy()
     timer_->DestroyTask(this);
 }
 
-x::ErrorInfo TimerTaskImpl::Init()
+bool TimerTaskImpl::Init()
 {
     tfd_ = timerfd_create(CLOCK_REALTIME, TFD_CLOEXEC);
     if (tfd_ < 0)
     {
-        return x::ErrorInfo(new x::SystemErrorInfo(errno, "create timer fd failed"));
+        ErrorInfoFactory::Create()->SetSystemError(errno, "create timer fd failed");
     }
-    return x::ErrorInfo();
+    return true;
 }
 
 x::task::TimerTask* TimerTaskImpl::SetTaskFunc(bool(*func)(int, void*), void* obj)
@@ -87,7 +88,7 @@ x::task::TimerTask* TimerTaskImpl::Repeat(int sec, int nsec)
     return this;
 }
 
-x::ErrorInfo TimerTaskImpl::Run()
+bool TimerTaskImpl::Run()
 {
     itimerspec its;
     its.it_value.tv_sec = sec_;
@@ -99,7 +100,8 @@ x::ErrorInfo TimerTaskImpl::Run()
     int ret = timerfd_settime(tfd_, flag, &its, NULL);
     if (ret)
     {
-        return x::ErrorInfo(new x::SystemErrorInfo(errno, "set timer failed"));
+        ErrorInfoFactory::Create()->SetSystemError(errno, "set timer failed");
+        return false;
     }
 
     epoll_event event;
@@ -109,9 +111,10 @@ x::ErrorInfo TimerTaskImpl::Run()
     ret = epoll_ctl(timer_->Fd(), EPOLL_CTL_ADD, tfd_, &event);
     if (ret)
     {
-        return x::ErrorInfo(new x::SystemErrorInfo(errno, "epoll ctl failed"));
+        ErrorInfoFactory::Create()->SetSystemError(errno, "epoll ctl failed");
+        return false;
     }
-    return x::ErrorInfo();
+    return true;
 }
 
 bool TimerTaskImpl::RunCallbackFunc()

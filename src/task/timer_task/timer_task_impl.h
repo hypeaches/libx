@@ -13,12 +13,12 @@ public:
     TimerTaskImpl(x::task::TimerImpl* timer);
     virtual ~TimerTaskImpl();
     virtual void Destroy() override;
-    virtual x::ErrorInfo Init() override;
+    virtual bool Init() override;
     virtual x::task::TimerTask* SetTaskFunc(bool(*func)(int, void*), void*) override;
     virtual x::task::TimerTask* At(int sec, int nsec) override;
     virtual x::task::TimerTask* After(int sec, int nsec) override;
     virtual x::task::TimerTask* Repeat(int sec, int nsec) override;
-    virtual x::ErrorInfo Run() override;
+    virtual bool Run() override;
 
 public:
     bool RunCallbackFunc();

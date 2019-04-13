@@ -18,7 +18,7 @@ public:
     virtual ~TimerImpl();
 
     virtual x::task::TimerTask* CreateTask() override;
-    virtual x::ErrorInfo Init() override;
+    virtual bool Init() override;
     virtual void CreateThreadPool(int thread_pool_size, int max_task_num) override;
 
 public:
